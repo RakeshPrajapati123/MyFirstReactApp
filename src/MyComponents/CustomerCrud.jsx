@@ -7,8 +7,6 @@ function CustomerCRUD() {
   const UPDATE_URL = "http://localhost:57224/api/AjaxAPI/UpdateCustomer";
   const DELETE_URL = "http://localhost:57224/api/AjaxAPI/DeleteCustomer";
 
-  //const API_URL = "http://localhost:57224/api/AjaxAPI/GetCustomers";
-
   const [customers, setCustomers] = useState([]);
 
   const [formData, setFormData] = useState({
@@ -75,17 +73,26 @@ function CustomerCRUD() {
     });
   };
 
-  const deleteCustomer = (id) => {
-    if (window.confirm("Are you sure you want to delete?")) {
-      axios
-        .post(DELETE_URL, {
-          CustomerID: id,
-        })
-        .then(() => {
-          alert("Customer Deleted Successfully");
-          getCustomers();
-        })
-        .catch((err) => console.error(err));
+  //------Delete functionality with confirmation dialog on 16-06-2026 by Rakesh Prajapati------
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setShowConfirm(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await axios.post(DELETE_URL, {
+        CustomerID: deleteId,
+      });
+
+      getCustomers(); // refresh from database
+
+      setShowConfirm(false);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -180,7 +187,7 @@ function CustomerCRUD() {
 
                       <button
                         className="btn btn-danger btn-sm"
-                        onClick={() => deleteCustomer(customer.CustomerID)}
+                        onClick={() => handleDeleteClick(customer.CustomerID)}
                       >
                         Delete
                       </button>
@@ -198,6 +205,43 @@ function CustomerCRUD() {
           </table>
         </div>
       </div>
+
+      {showConfirm && (
+        <div
+          className="modal d-block"
+          style={{ background: "rgba(0,0,0,0.5)" }}
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content shadow">
+              <div className="modal-header bg-danger text-white">
+                <h5 className="modal-title">Confirm Delete</h5>
+                <button
+                  className="btn-close btn-close-white"
+                  onClick={() => setShowConfirm(false)}
+                ></button>
+              </div>
+
+              <div className="modal-body">
+                <p>Are you sure you want to delete this customer?</p>
+              </div>
+
+              <div className="modal-footer">
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setShowConfirm(false)}
+                >
+                  Cancel
+                </button>
+
+                <button className="btn btn-danger" onClick={confirmDelete}>
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        //-------Delete Confirmation Modal on 16-06-2026 by Rakesh Prajapati------
+      )}
     </div>
   );
 }
