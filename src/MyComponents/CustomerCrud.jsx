@@ -172,9 +172,9 @@ function CustomerCRUD() {
 
             <tbody>
               {customers.length > 0 ? (
-                customers.map((customer) => (
+                customers.map((customer,index) => (
                   <tr key={customer.CustomerID}>
-                    <td>{customer.CustomerID}</td>
+                    <td>{index + 1}</td>   {/* Serial Number */}
                     <td>{customer.Name}</td>
                     <td>{customer.Country}</td>
                     <td>
