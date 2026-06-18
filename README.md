@@ -63,10 +63,10 @@ npm run dev
 ## 📸 Screenshots
 
 ### Todo List
-![Todo List](screenshots/todolist.png)
+![Todo List](./screenshots/todolist.png)
 
 ### Customer List
-![Customer List](screenshots/customercrudoperations.png)
+![Customer List](./screenshots/customercrudoperations.png)
 
 ## Learning Objectives
 
